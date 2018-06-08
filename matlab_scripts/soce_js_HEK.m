@@ -1,5 +1,4 @@
 %%% simulate SOCE in the ER-PM junction
-%% parameters to change
 %% Setup parameters
 Lp=2515; %distance to PM (nm)
 Le=2500; %distance to ER membrane (nm)
@@ -30,8 +29,8 @@ P=round(length_t/n_timesteps);
 dzj=0.15; 
 zj=Le:dzj:Lp;
 
-mj=1:2*w/dx; %number of eigenvalues 
-nj=1:2*w/dy; %number of eigenvalues 
+mj=1:w; %number of eigenvalues 
+nj=1:w; %number of eigenvalues 
 pj=1:(Lp-Le)/dzj; %number of eigenvalues 
 
 mu_j=mj*pi/(2*w); %eigenvalues
@@ -42,8 +41,8 @@ alpha_j=pj*pi/(Lp-Le); %eigenvalues
 dzs=5;
 zs=Lextd:dzs:Le;
 
-ms=1:1:2*w/dx;
-ns=1:1:2*w/dy;
+ms=1:1:w;
+ns=1:1:w;
 ps=1:(Le-Lextd)/dzs;
 
 mu_s=ms*pi/(2*w);
@@ -100,28 +99,24 @@ cs=cs0*ones(length(x),length(y),length(zs));
 cs_DBC=cs0;
 %% create greens function 
 % ER-PM junction
-tic
 [gzj,gxyj] = fn_gfj(Lp,Le,w,x,y,zj,mu_j,eta_j,alpha_j,Dj,dt);
-toc
 
 % sub-PM ER
-tic
 [gzs,gxys] = fn_gfs(Le,Lextd,w,x,y,zs,mu_s,eta_s,alpha_s,De,dt);
-toc
 
 %% create steady state solution for Orai channels on PM
 n_orai=length(x_orai);
 
 ss_orai_x_y_z=zeros(length(x),length(y),length(zj));
 
-tic
+
 for j=1:n_orai
 x_orai_i=x_orai(j);
 y_orai_i=y_orai(j);
 
 ss_orai_x_y_z = ss_orai_x_y_z + activity_level(j)*fn_ss_PM_j(eta_j,mu_j,x,y,zj,w,x_orai_i,y_orai_i,Lp,Le);
 end
-toc
+
 
 ss_orai_xyz=reshape(ss_orai_x_y_z,length(x)*length(y),length(zj));
 ss_orai_xyz_total=flux_CRAC_magnitude*ss_orai_xyz;
@@ -133,7 +128,7 @@ n_serca=length(x_serca);
 ss_serca_xyzn_j=zeros(length(x)*length(y),length(zj),n_serca);
 ss_serca_xyzn_s=zeros(length(x)*length(y),length(zs),n_serca);
 
-tic
+
 for j=1:n_serca
 x_serca_i=x_serca(j);
 y_serca_i=y_serca(j);
@@ -142,7 +137,7 @@ ss_serca_xyzn_j(:,:,j) = fn_ss_ERM_j(eta_j,mu_j,x,y,zj,w,x_serca_i,y_serca_i,Lp,
 ss_serca_xyzn_s(:,:,j) = fn_ss_ERM_s(eta_s,mu_s,x,y,zs,w,x_serca_i,y_serca_i,Le,Lextd);
 
 end
-toc
+
 
 %% numerically time step solution
 cj_n=zeros(length(x)*length(y),length(zj),n_timesteps);
@@ -150,15 +145,15 @@ cs_n=zeros(length(x)*length(y),length(zs),n_timesteps);
 
 if d_serca==30
 if SERCA_choice==1 
-    fn_data_dir=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
+    fn_data_dir=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
 elseif SERCA_choice==2
-    fn_data_dir=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
+    fn_data_dir=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
 end
 else
 if SERCA_choice==1 
-    fn_data_dir=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
+    fn_data_dir=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
 elseif SERCA_choice==2
-    fn_data_dir=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
+    fn_data_dir=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/'];
 end
 end
 
@@ -169,20 +164,19 @@ end
 
 SERCA_activity=zeros(n_serca,length_t);
 
-tic
 for p=1:P
     
 if d_serca==30
 if SERCA_choice==1 
-    fn_data=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
+    fn_data=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
 elseif SERCA_choice==2
-    fn_data=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
+    fn_data=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
 end
 else
 if SERCA_choice==1 
-    fn_data=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
+    fn_data=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
 elseif SERCA_choice==2
-    fn_data=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
+    fn_data=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/soce-p_',num2str(p),'.mat'];
 end
 end
      
@@ -217,6 +211,7 @@ ss_serca_xyzn_total_s=zeros(length(x)*length(y),length(zs));
         cs_n(:,:,q(i)) = reshape(cs,length(x)*length(y),length(zs));
     end
     
+if save_data==1
 if p==1
     
     save(fn_data,'cj_n','cs_n','-v7.3')
@@ -232,30 +227,25 @@ if p==1
     p
    
 end
+end
 
 end
-toc
+
 if d_serca==30
 if SERCA_choice==1 
-    fn_serca=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_actvity.mat'];
+    fn_serca=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2a_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_actvity.mat'];
 elseif SERCA_choice==2
-    fn_serca=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_actvity.mat'];
+    fn_serca=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_SERCA2b_30nm_ring_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_actvity.mat'];
 end
 else
 if SERCA_choice==1 
-    fn_serca=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_activity.mat'];
+    fn_serca=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2a_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_activity.mat'];
 elseif SERCA_choice==2
-    fn_serca=['/maths/scratch/bhzem/cube/FASEB_sims_20180604/simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_activity.mat'];
+    fn_serca=['simulated_data/soce_hek_I_orai_',num2str(I_CRAC),'_',num2str(n_orai),'_Orai_d_orai_',num2str(d_orai),'_',num2str(n_serca),'_peripheral_SERCA2b_dt_',num2str(dt),'_dx_',num2str(dx),'_dy_',num2str(dy),'_dzs_',num2str(dzs),'_m_',num2str(length(mj)),'_n_',num2str(length(nj)),'_p_',num2str(length(pj)),'_T_',num2str(length_t),'_Lb_',num2str(Lb),'_Lextd_',num2str(Lextd),'/serca_activity.mat'];
 end
 end
 
+if save_data==1
 save(fn_serca,'SERCA_activity')
-
-cd(fn_data_dir)
-figure(1); hold on;plot(x(x_orai),y(y_orai),'bo','markerfacecolor','b'); xlim([x(1) x(end)]); ylim([y(1) y(end)])
-figure(1); hold on;plot(x(x_serca),y(y_serca),'ro','markerfacecolor','r'); xlim([x(1) x(end)]); ylim([y(1) y(end)])
-axis(gca,'square')
-set(gca,'fontsize',30,'fontweight','bold')
-savefig('illustration')
-cd ..
+end
 
