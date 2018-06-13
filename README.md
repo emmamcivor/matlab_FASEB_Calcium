@@ -63,8 +63,8 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Figs. 4 and 6.
 
-![Calcium profile along PM with cross-linked Orai1 channels](figures/lat_ring_PM.jpg){ width=50% }
-![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and a ring of SERCA2b pumps placed 30nm away](figures/lat_ring_ER_refill_short.jpg){ width=50% }
+![Calcium profile along PM with cross-linked Orai1 channels](figures/lat_ring_PM.jpg)
+![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and a ring of SERCA2b pumps placed 30nm away](figures/lat_ring_ER_refill_short.jpg)
 
 ### Non cross-linked Orai channels surrounded by a ring of SERCA pumps 30nm away
 
@@ -84,8 +84,8 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Figs. 5 and 6.
 
-![Calcium profile along PM with non cross-linked Orai1 channels](figures/nonlat_ring_PM.jpg){ width=50% }
-![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and a ring of SERCA2b pumps placed 30nm away](figures/nonlat_ring_ER_refill_short.jpg){ width=50% }
+![Calcium profile along PM with non cross-linked Orai1 channels](figures/nonlat_ring_PM.jpg)
+![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and a ring of SERCA2b pumps placed 30nm away](figures/nonlat_ring_ER_refill_short.jpg)
 
 ### Cross-linked Orai channels with SERCA pumps placed along the periphery of the ER-PM junction
 
@@ -105,7 +105,7 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Fig. 7.
 
-![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction](figures/lat_peri_ER_refill_short.jpg){ width=50% }
+![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction](figures/lat_peri_ER_refill_short.jpg)
 
 ### Non cross-linked Orai channels with SERCA pumps placed along the periphery of the ER-PM junction
 
@@ -125,7 +125,7 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Fig. 7.
 
-![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction](figures/nonlat_peri_ER_refill_short.jpg){ width=50% }
+![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction](figures/nonlat_peri_ER_refill_short.jpg)
 
 ### Cross-linked Orai channels with SERCA pumps placed along the periphery of the ER-PM junction and 12 extra SERCA pumps in ER-PM junction
 
@@ -145,7 +145,7 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Fig. 8.
 
-![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction. Included 12 additional SERCA2b pumps.](figures/lat_peri_sub_z_short_sim_add_SERCA.jpg){ width=50% }
+![Calcium profile in the sub-PM ER with cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction. Included 12 additional SERCA2b pumps.](figures/lat_peri_sub_z_short_sim_add_SERCA.jpg)
 
 
 ### Non cross-linked Orai channels with SERCA pumps placed along the periphery of the ER-PM junction and 8 extra SERCA pumps in ER-PM junction
@@ -166,6 +166,6 @@ Execute the following command.
 
 This will simulate SOCE and the calcium diffusion and ER refilling occurring in 1ms and then plots the calcium profiles in Fig. 7.
 
-![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction. Included 8 additional SERCA2b pumps.](figures/nonlat_peri_sub_z_short_sim_add_SERCA.jpg){ width=50% }
+![Calcium profile in the sub-PM ER with non cross-linked Orai1 channels and SERCA2b pumps placed along the periphery of the ER-PM junction. Included 8 additional SERCA2b pumps.](figures/nonlat_peri_sub_z_short_sim_add_SERCA.jpg)
 
 
