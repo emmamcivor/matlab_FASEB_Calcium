@@ -11,7 +11,7 @@ ss_serca_xyz_00=zs-Lb;
 bx=sin((xs'-w)*mu_s)*diag(sin(mu_s*(xs(x_serca_i)-w)));
 by=ones(length(ys),1);
 bz_num= exp(-mu_s'*(Le-zs)) - exp(-mu_s'*(zs-2*Lb+Le));
-bz_den=mu_s'.*(1 - exp(-2*mu_s'*(Le-Lb)));
+bz_den=mu_s'.*(1 + exp(-2*mu_s'*(Le-Lb)));
 bz=bz_num./repmat(bz_den,1,length(zs));
 ss_serca_xyz_m0=kron(by,bx)*bz;
 
@@ -19,7 +19,7 @@ ss_serca_xyz_m0=kron(by,bx)*bz;
 by=sin((ys'-w)*eta_s)*diag(sin(eta_s*(ys(y_serca_i)-w)));
 bx=ones(length(xs),1);
 bz_num= exp(-eta_s'*(Le-zs)) - exp(-eta_s'*(zs-2*Lb+Le));
-bz_den=eta_s'.*(1 - exp(-2*eta_s'*(Le-Lb)));
+bz_den=eta_s'.*(1 + exp(-2*eta_s'*(Le-Lb)));
 bz=bz_num./repmat(bz_den,1,length(zs));
 ss_serca_xyz_0n=kron(by,bx)*bz;
 
@@ -27,7 +27,7 @@ ss_serca_xyz_0n=kron(by,bx)*bz;
 bx=sin((xs'-w)*mu_s)*diag(sin(mu_s*(xs(x_serca_i)-w)));
 by=sin((ys'-w)*eta_s)*diag(sin(eta_s*(ys(y_serca_i)-w)));
 bz_num= exp(-beta_xy*(Le-zs)) - exp(-beta_xy*(zs-2*Lb+Le));
-bz_den=beta_xy.*(1 - exp(-2*beta_xy*(Le-Lb)));
+bz_den=beta_xy.*(1 + exp(-2*beta_xy*(Le-Lb)));
 bz=bz_num./repmat(bz_den,1,length(zs));
 bxy_nm=kron(by,bx);
 ss_serca_xyz_mn=bxy_nm*bz;
