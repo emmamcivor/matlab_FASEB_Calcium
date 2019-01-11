@@ -19,6 +19,7 @@ I have included code with a coarse spatial grid (dx=5nm, dy=5nm), in file
 This takes about 5 minutes to run on a laptop.
 
 The code is a prototype and as part of our subsequent work we intend to develop more user friendly software, for now if you have any problems or would like help please contact us. 
+
 A word about memory usage: the code creates large matrices and the simulations are saved as four dimensional matrices, approximately 2GB in size; these are all held in memory. 
 
 ## Example simulations
